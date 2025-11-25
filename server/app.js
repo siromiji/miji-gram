@@ -19,6 +19,7 @@ app.use('/api/auth', authRouter);
 
 //에러핸들러 등록
 app.use(errorHandler);
+
 // --------------------
 // 해당 Port로 express 실행
 // --------------------

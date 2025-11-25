@@ -6,6 +6,7 @@
 
 import { SUCCESS } from "../../configs/responseCode.config.js";
 import authService from "../services/auth.service.js";
+import cookieUtill from "../utils/cookie/cookie.utill.js";
 import { createBaseResponse } from "../utils/createBaseResponse.util.js";
 
 // ----------------
@@ -19,20 +20,24 @@ import { createBaseResponse } from "../utils/createBaseResponse.util.js";
  * @returns
  */
 async function login(req, res, next) {
-  logger.error('에러에러');
-  logger.warn('워닝워닝');
-  logger.info('인포인포');
-  logger.http('에이치티티피');
-  logger.verbose('버보스');
-  logger.debug('디버그');
-  logger.silly('실리');
+  // logger.error('에러에러');
+  // logger.warn('워닝워닝');
+  // logger.info('인포인포');
+  // logger.http('에이치티티피');
+  // logger.verbose('버보스');
+  // logger.debug('디버그');
+  // logger.silly('실리');
   try {
     const body = req.body; // 파라미터 획득
 
     // 로그인 서비스 호출
-    const result = await authService.login(body);
+    const {accessToken , refreshToken , user} = await authService.login(body);
   
-    return res.status(SUCCESS.status).send(createBaseResponse(SUCCESS, result));
+    // Cookie에 RefreshToken 설정
+
+      cookieUtill.setCookieRefreshToken(res, refreshToken);
+
+    return res.status(SUCCESS.status).send(createBaseResponse(SUCCESS, {accessToken, user}));
   } catch(error) {
      next(error);
   }
